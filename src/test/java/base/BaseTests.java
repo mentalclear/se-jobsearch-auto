@@ -44,7 +44,7 @@ public class BaseTests {
 
     @BeforeMethod
     public void goHome() {
-        driver.get("https://the-internet.herokuapp.com/"); // .get waits for the page to load
+        driver.get("https://www.indeed.com/"); // .get waits for the page to load
     }
 
     @AfterClass
