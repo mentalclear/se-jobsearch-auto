@@ -79,7 +79,7 @@ public class EventReporter implements WebDriverEventListener {
 
     @Override
     public void beforeClickOn(WebElement webElement, WebDriver webDriver) {
-        System.out.println("Clicking on " + webElement.getText());
+       // System.out.println("Clicking on " + webElement.getText());
     }
 
     @Override
