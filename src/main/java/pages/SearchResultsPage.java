@@ -1,11 +1,9 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.WaitManager;
 
 public class SearchResultsPage {
     private WebDriver driver;
@@ -53,17 +51,33 @@ public class SearchResultsPage {
         wait = new WebDriverWait(driver, 5);
 
         // driver.findElements(searchResultsItems).get(index).click();
-        WebElement element = driver.findElements(searchResultsItems).get(index);
-        wait.until(ExpectedConditions.elementToBeClickable(element));
-        element.click();
+        WebElement searchResultsElement = driver.findElements(searchResultsItems).get(index);
+        wait.until(ExpectedConditions.elementToBeClickable(searchResultsElement));
+        searchResultsElement.click();
+        System.out.println("1 Clicked on: " + searchResultsElement.getText());
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(companyNameLink));
-        driver.findElement(companyNameLink).click();
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(companyNameLink));
+            WebElement companyLinkElement = driver.findElement(companyNameLink);
+            wait.until(ExpectedConditions.elementToBeClickable(companyLinkElement));
+            companyLinkElement.click();
+            System.out.println("2 Clicked on: " + companyLinkElement.getText());
+        } catch (TimeoutException e) {
+            return null;
+        }
 
         return new CompanyPageOnIndeed(driver);
     }
 
     public void getToNextResultsPage() {
         driver.findElement(paginationNext).click();
+    }
+
+    public void scrollThePage() {
+        WaitManager waitManager = new WaitManager(driver, 2);
+        var bottomPageElement = driver.findElement(paginationNext);
+        String script = "arguments[0].scrollIntoView({behavior: 'smooth'})";
+        ((JavascriptExecutor)driver).executeScript(script, bottomPageElement);
+        waitManager.dummyWait();
     }
 }
