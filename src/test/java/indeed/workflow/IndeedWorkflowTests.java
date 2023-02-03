@@ -1,15 +1,15 @@
-package workflow;
+package indeed.workflow;
 
 import base.BaseTests;
 import org.testng.annotations.Test;
 import pages.CompanyPageOnIndeed;
-import pages.SearchResultsPage;
+import pages.SearchResultsPageOnIndeed;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class WorkflowTests extends BaseTests {
-    private SearchResultsPage searchResultsPage;
+public class IndeedWorkflowTests extends BaseTests {
+    private SearchResultsPageOnIndeed searchResultsPage;
 
     @Test(priority = 1)
     public void searchIndeedJobsTest() {
@@ -39,9 +39,9 @@ public class WorkflowTests extends BaseTests {
     }
 
     private void startHomePageSearch(String jobSearchUrl, String jobTitle, String jobLocation) {
-        homePage.populateWhatField(jobTitle);
-        homePage.populateWhereField(jobLocation);
-        searchResultsPage = homePage.clickFindJobs();
+        homePageOnIndeed.populateWhatField(jobTitle);
+        homePageOnIndeed.populateWhereField(jobLocation);
+        searchResultsPage = homePageOnIndeed.clickFindJobs();
         assertTrue(searchResultsPage.getCurrentUrl().contains(jobSearchUrl));
     }
 

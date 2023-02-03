@@ -4,16 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-
-public class HomePage {
+public class HomePageOnIndeed {
     private WebDriver driver;
     private By whatSearchField = By.id("text-input-what");
     private By whereSearchField = By.id("text-input-where");
     private By whereFieldButton = By.xpath("//input[@id='text-input-where']/following-sibling::span");
     private By findJobsButton = By.cssSelector("button.yosegi-InlineWhatWhere-primaryButton");
 
-    public HomePage(WebDriver driver) {
+    public HomePageOnIndeed(WebDriver driver) {
         this.driver = driver;
     }
     public void populateWhatField(String searchTerm) {
@@ -25,8 +23,8 @@ public class HomePage {
         driver.findElement(whereFieldButton).click();
         fieldElement.sendKeys(searchTerm);
     }
-    public SearchResultsPage clickFindJobs() {
+    public SearchResultsPageOnIndeed clickFindJobs() {
         driver.findElement(findJobsButton).click();
-        return new SearchResultsPage(driver);
+        return new SearchResultsPageOnIndeed(driver);
     }
 }

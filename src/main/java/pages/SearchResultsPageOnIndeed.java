@@ -5,7 +5,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.WaitManager;
 
-public class SearchResultsPage {
+public class SearchResultsPageOnIndeed {
     private WebDriver driver;
     private WebDriverWait wait;
     private By remoteJobsSelector = By.id("filter-remotejob");
@@ -17,7 +17,7 @@ public class SearchResultsPage {
     private By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
 
 
-    public SearchResultsPage(WebDriver driver) {
+    public SearchResultsPageOnIndeed(WebDriver driver) {
         this.driver = driver;
     }
 
