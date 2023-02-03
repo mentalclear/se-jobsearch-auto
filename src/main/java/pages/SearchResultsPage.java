@@ -1,12 +1,11 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe;
 
 public class SearchResultsPage {
     private WebDriver driver;
@@ -15,7 +14,9 @@ public class SearchResultsPage {
     private By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
     private By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
     private By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li");
+    // private By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li/descendant-or-self::a");
     private By companyNameLink = By.xpath("//div[@data-company-name]/a");
+    private By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
 
 
     public SearchResultsPage(WebDriver driver) {
@@ -40,31 +41,29 @@ public class SearchResultsPage {
         return driver.findElement(resultingAmountOfJobs).getText();
     }
 
-    public int getListOfSearchResultsSize() {
+    public int getResultsSize() {
         return driver.findElements(searchResultsItems).size();
     }
 
+    public Boolean isPaginationNextVisible() {
+        return driver.findElements(paginationNext).size() > 0;
+    }
 
     public CompanyPageOnIndeed clickListItemCompanyLink(int index) {
-        wait = new WebDriverWait(driver, 2);
-        String originalWindow = driver.getWindowHandle();
+        wait = new WebDriverWait(driver, 5);
 
-        driver.findElements(searchResultsItems).get(index).click();
+        // driver.findElements(searchResultsItems).get(index).click();
+        WebElement element = driver.findElements(searchResultsItems).get(index);
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+        element.click();
+
         wait.until(ExpectedConditions.presenceOfElementLocated(companyNameLink));
-
         driver.findElement(companyNameLink).click();
 
-        wait.until(numberOfWindowsToBe(2));
-
-        // Loop through until we find a new window handle
-        for (String windowHandle : driver.getWindowHandles()) {
-            if(!originalWindow.contentEquals(windowHandle)) {
-                driver.switchTo().window(windowHandle);
-                break;
-            }
-        }
-        // driver.switchTo().window(originalWindow);
-        System.out.println("********!!!!" + driver.getTitle());
         return new CompanyPageOnIndeed(driver);
+    }
+
+    public void getToNextResultsPage() {
+        driver.findElement(paginationNext).click();
     }
 }

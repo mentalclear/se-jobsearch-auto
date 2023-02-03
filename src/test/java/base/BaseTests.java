@@ -47,10 +47,10 @@ public class BaseTests {
         driver.get("https://www.indeed.com/"); // .get waits for the page to load
     }
 
-//    @AfterClass
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
+    }
 
     @AfterMethod
     public void recordFailure(ITestResult result) {
@@ -70,8 +70,11 @@ public class BaseTests {
     }
 
     private ChromeOptions getChromeOptions() {
+        String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
         ChromeOptions options = new ChromeOptions();
         options.addArguments("disable-infobars");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("user-agent="+userAgent);
         // options.setHeadless(true); // Running in headless mode
 
         return options;

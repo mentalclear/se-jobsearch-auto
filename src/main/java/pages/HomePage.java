@@ -10,7 +10,7 @@ public class HomePage {
     private WebDriver driver;
     private By whatSearchField = By.id("text-input-what");
     private By whereSearchField = By.id("text-input-where");
-    private By whereFieldButton = By.xpath("//input[@id=\"text-input-where\"]/following-sibling::span");
+    private By whereFieldButton = By.xpath("//input[@id='text-input-where']/following-sibling::span");
     private By findJobsButton = By.cssSelector("button.yosegi-InlineWhatWhere-primaryButton");
 
     public HomePage(WebDriver driver) {
