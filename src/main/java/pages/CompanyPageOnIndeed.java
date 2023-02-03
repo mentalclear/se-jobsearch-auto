@@ -1,13 +1,12 @@
 package pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.CsvFileWriter;
+import utils.WaitManager;
 
 public class CompanyPageOnIndeed {
     private WebDriver driver;
-    private WebDriverWait wait;
     private By companyName = By.xpath("//div[@itemprop='name']");
     private By companySiteUrl = By.xpath("//a[@data-tn-element='companyLink[]']");
     private By headerElement = By.xpath("//header[@data-tn-section='header']");
@@ -20,8 +19,8 @@ public class CompanyPageOnIndeed {
         driver.close();
     }
     public void storeCompanyInfo() {
+        WaitManager waitManager = new WaitManager(driver, 5);
         CsvFileWriter fileWriter = new CsvFileWriter();
-        wait = new WebDriverWait(driver, 5);
         String companyUrl = "";
 
         String company = driver.findElement(companyName).getText();
@@ -34,16 +33,12 @@ public class CompanyPageOnIndeed {
 
         // indeed.com gets triggered when pages are opened too fast this slows the process a little.
         // >= 5 seconds is proven to be the solution.
-        try {
-            wait.until(ExpectedConditions.urlToBe("dummy-url-right-here"));
-        } catch (TimeoutException e) {}
+        waitManager.dummyWait();
     }
 
     private void scrollThePage() {
-        var topPageElement = driver.findElement(headerElement);
         var bottomPageElement = driver.findElement(bottomSearch);
-        String script = "arguments[0].scrollIntoView()";
+        String script = "arguments[0].scrollIntoView({behavior: 'smooth'})";
         ((JavascriptExecutor)driver).executeScript(script, bottomPageElement);
-        ((JavascriptExecutor)driver).executeScript(script, topPageElement);
     }
 }

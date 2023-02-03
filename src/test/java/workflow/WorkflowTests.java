@@ -28,7 +28,9 @@ public class WorkflowTests extends BaseTests {
         int resultsSize = searchResultsPage.getResultsSize();
         for (int i = 0; i < resultsSize-1; i++) {
             if (i == 5 || i == 11) continue;
+            searchResultsPage.scrollThePage();
             CompanyPageOnIndeed companyPage = searchResultsPage.clickListItemCompanyLink(i);
+            if (companyPage == null) continue;
             getWindowManager().switchToNewTab();
             companyPage.storeCompanyInfo();
             companyPage.closePage();
