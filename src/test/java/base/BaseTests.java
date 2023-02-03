@@ -29,22 +29,34 @@ public class BaseTests {
 
     @BeforeClass
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "resources/chromedriver");
-
+        selectWebDriverForOS();
         driver = new EventFiringWebDriver(new ChromeDriver(getChromeOptions()));
         // driver = new ChromeDriver(); // without listener
         driver.register(new EventReporter());
-
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS); // waits for page load on project level
         // driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS); // waits on a project level
         goHome();
-
         homePage = new HomePage(driver);
+    }
+
+    private static void selectWebDriverForOS() {
+        String selectedDriver = "chromedriver";
+        if(isLinux()) selectedDriver = "linux/chromedriver";
+        if(isWindows()) selectedDriver = "windows/chromedriver.exe";
+        System.setProperty("webdriver.chrome.driver", "resources/" + selectedDriver);
+    }
+
+    private static boolean isWindows() {
+        return System.getProperty("os.name").contains("Windows");
+    }
+
+    private static boolean isLinux() {
+        return System.getProperty("os.name").contains("Linux");
     }
 
     @BeforeMethod
     public void goHome() {
-        driver.get("https://www.indeed.com/"); // .get waits for the page to load
+        driver.get("https://www.indeed.com/");
     }
 
     @AfterClass
@@ -65,22 +77,18 @@ public class BaseTests {
         }
     }
 
-    public WindowManager getWindowManager() {
-        return new WindowManager(driver);
-    }
-
     private ChromeOptions getChromeOptions() {
-        String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("disable-infobars");
-        options.addArguments("--window-size=1920,1080");
-        options.addArguments("user-agent="+userAgent);
+        String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
+        options.addArguments("--window-size=1920,1080", "user-agent="+userAgent, "disable-infobars");
         // options.setHeadless(true); // Running in headless mode
-
         return options;
     }
-
     public CookieManager getCookieManager(){
         return new CookieManager(driver);
+    }
+
+    public WindowManager getWindowManager() {
+        return new WindowManager(driver);
     }
 }
