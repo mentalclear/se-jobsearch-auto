@@ -74,7 +74,8 @@ public class BaseTests {
     private ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
         String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
-        options.addArguments("--window-size=1920,1080", "user-agent="+userAgent, "disable-infobars");
+        // For window size use: "--window-size=1920,1080"
+        options.addArguments("start-maximized", "user-agent="+userAgent, "disable-infobars");
         // options.setHeadless(true); // Running in headless mode
         return options;
     }
