@@ -17,13 +17,13 @@ public class IndeedWorkflowTests extends BaseTests {
         String jobLocation = "United States";
         startHomePageSearch("https://www.indeed.com/jobs", jobTitle, jobLocation);
         setSearchToRemoteJobs();
+        disableObstructingElement();
 
         while (searchResultsPage.isPaginationNextVisible()) {
             extractCompaniesData(jobTitle, jobLocation);
             searchResultsPage.getToNextResultsPage();
         }
     }
-
     private void extractCompaniesData(String jobTitle, String jobLocation) {
         int resultsSize = searchResultsPage.getResultsSize();
         for (int i = 0; i < resultsSize-1; i++) {
@@ -37,17 +37,19 @@ public class IndeedWorkflowTests extends BaseTests {
             getWindowManager().switchToTab(jobTitle + " Jobs, Employment in "+ jobLocation +" | Indeed.com");
         }
     }
-
     private void startHomePageSearch(String jobSearchUrl, String jobTitle, String jobLocation) {
         homePageOnIndeed.populateWhatField(jobTitle);
         homePageOnIndeed.populateWhereField(jobLocation);
         searchResultsPage = homePageOnIndeed.clickFindJobs();
         assertTrue(searchResultsPage.getCurrentUrl().contains(jobSearchUrl));
     }
-
     private void setSearchToRemoteJobs() {
         searchResultsPage.setRemoteJobs();
         assertEquals(searchResultsPage.getRemoteJobsPillStyle(), "rgba(89, 89, 89, 1)");
         assertTrue(searchResultsPage.getResultingNumberOfJobs().contains("jobs"));
+    }
+    private void disableObstructingElement(){
+        searchResultsPage.setAnnoyingElementToHidden();
+        assertTrue(!searchResultsPage.isAnnoyingElementVisible());
     }
 }
