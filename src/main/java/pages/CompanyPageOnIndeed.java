@@ -22,13 +22,14 @@ public class CompanyPageOnIndeed {
         WaitManager waitManager = new WaitManager(driver, 5);
         CsvFileWriter fileWriter = new CsvFileWriter();
         String companyUrl = "";
+        String company = "";
 
-        String company = driver.findElement(companyName).getText();
         try {
+            company = driver.findElement(companyName).getText();
             companyUrl = driver.findElement(companySiteUrl).getAttribute("href");
         } catch (NoSuchElementException e) {}
 
-        if (!companyUrl.isEmpty()) fileWriter.writeDataToCSV(company, companyUrl);
+        if (!company.isEmpty() || !companyUrl.isEmpty() ) fileWriter.writeDataToCSV(company, companyUrl);
         scrollThePage();
 
         // indeed.com gets triggered when pages are opened too fast this slows the process a little.
