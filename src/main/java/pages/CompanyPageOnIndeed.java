@@ -29,7 +29,7 @@ public class CompanyPageOnIndeed {
             companyUrl = driver.findElement(companySiteUrl).getAttribute("href");
         } catch (NoSuchElementException e) {}
 
-        if (!company.isEmpty() || !companyUrl.isEmpty() ) fileWriter.writeDataToCSV(company, companyUrl);
+        if (!companyUrl.isEmpty()) fileWriter.writeDataToCSV(company, companyUrl);
         scrollThePage();
 
         // indeed.com gets triggered when pages are opened too fast this slows the process a little.
