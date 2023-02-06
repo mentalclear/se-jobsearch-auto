@@ -22,9 +22,10 @@ public class CompanyPageOnIndeed {
         WaitManager waitManager = new WaitManager(driver, 5);
         CsvFileWriter fileWriter = new CsvFileWriter();
         String companyUrl = "";
+        String company = "";
 
-        String company = driver.findElement(companyName).getText();
         try {
+            company = driver.findElement(companyName).getText();
             companyUrl = driver.findElement(companySiteUrl).getAttribute("href");
         } catch (NoSuchElementException e) {}
 
