@@ -27,4 +27,18 @@ public class HomePageOnIndeed {
         driver.findElement(findJobsButton).click();
         return new SearchResultsPageOnIndeed(driver);
     }
+
+    public String getPageTitle() {
+        return driver.getTitle();
+    }
+
+    public boolean isInputFieldPresent(String fieldName) {
+       By element = whatSearchField;
+       if (fieldName.equals("Where")) element = whereSearchField;
+       return driver.findElement(element).isDisplayed();
+    }
+
+    public boolean isSubmitButtonPresent() {
+        return driver.findElement(findJobsButton).isDisplayed();
+    }
 }

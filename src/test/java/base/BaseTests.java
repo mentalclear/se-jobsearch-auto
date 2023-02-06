@@ -37,7 +37,7 @@ public class BaseTests {
         homePageOnIndeed = new HomePageOnIndeed(driver);
     }
 
-    private static void selectWebDriverForOS() {
+    public static void selectWebDriverForOS() {
         String selectedDriver = "chromedriver";
         if(isLinux()) selectedDriver = "linux/chromedriver";
         if(isWindows()) selectedDriver = "windows/chromedriver.exe";
