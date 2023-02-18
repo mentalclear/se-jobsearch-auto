@@ -10,6 +10,8 @@ public class SearchResultsPageOnIndeed {
     private WebDriverWait wait;
     private By remoteJobsSelector = By.id("filter-remotejob");
     private By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
+    private By postedBySelector = By.id("filter-srctype");
+    private By postedByMenuItem = By.xpath("//ul[@id='filter-srctype-menu']/li");
     private By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
     private By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li");
     private By companyNameLink = By.xpath("//div[@data-company-name]/a");
@@ -26,6 +28,10 @@ public class SearchResultsPageOnIndeed {
     public void setRemoteJobs() {
         driver.findElement(remoteJobsSelector).click();
         driver.findElement(remoteJobsMenuItem).click();
+    }
+    public void setPostedByEmployer() {
+        driver.findElement(postedBySelector).click();
+        driver.findElement(postedByMenuItem).click();
     }
     public String getRemoteJobsPillStyle() {
         return driver.findElement(remoteJobsSelector).getCssValue("background-color");

@@ -14,9 +14,10 @@ public class IndeedWorkflowTests extends BaseTests {
     @Test(priority = 1)
     public void searchIndeedJobsTest() {
         String jobTitle = "Quality Engineer";
-        String jobLocation = "United States";
+        String jobLocation = "Virginia, United States";
         startHomePageSearch("https://www.indeed.com/jobs", jobTitle, jobLocation);
-        setSearchToRemoteJobs();
+        // setSearchToRemoteJobs();
+        setSearchToPostedByEmployer();
         disableObstructingElement();
 
         while (searchResultsPage.isPaginationNextVisible()) {
@@ -48,6 +49,13 @@ public class IndeedWorkflowTests extends BaseTests {
         assertEquals(searchResultsPage.getRemoteJobsPillStyle(), "rgba(89, 89, 89, 1)");
         assertTrue(searchResultsPage.getResultingNumberOfJobs().contains("jobs"));
     }
+
+    private void setSearchToPostedByEmployer() {
+        searchResultsPage.setPostedByEmployer();
+        assertEquals(searchResultsPage.getRemoteJobsPillStyle(), "rgba(89, 89, 89, 1)");
+        assertTrue(searchResultsPage.getResultingNumberOfJobs().contains("jobs"));
+    }
+
     private void disableObstructingElement(){
         searchResultsPage.setAnnoyingElementToHidden();
         assertTrue(!searchResultsPage.isAnnoyingElementVisible());
