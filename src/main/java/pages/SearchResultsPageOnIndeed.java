@@ -12,11 +12,18 @@ public class SearchResultsPageOnIndeed {
     private By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
     private By postedBySelector = By.id("filter-srctype");
     private By postedByMenuItem = By.xpath("//ul[@id='filter-srctype-menu']/li");
+
+    private By jobTypeSelector = By.id("filter-jobtype");
+    private By jobTypeMenuItem = By.xpath("//ul[@id='filter-jobtype-menu']/li");
+
+    private By datePostedSelector = By.id("filter-dateposted");
+    private By datePostedMenuItem14days = By.xpath("//ul[@id='filter-dateposted-menu']/li[4]");
     private By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
     private By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li");
     private By companyNameLink = By.xpath("//div[@data-company-name]/a");
     private By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
     private By annoyingElement = By.xpath("//div[contains(@class, 'jobsearch-JapanSnackBarContainer-toastWrapper')]");
+
 
     public SearchResultsPageOnIndeed(WebDriver driver) {
         this.driver = driver;
@@ -26,15 +33,45 @@ public class SearchResultsPageOnIndeed {
     }
 
     public void setRemoteJobs() {
+        wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsSelector));
         driver.findElement(remoteJobsSelector).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsMenuItem));
         driver.findElement(remoteJobsMenuItem).click();
     }
     public void setPostedByEmployer() {
+        wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.presenceOfElementLocated(postedBySelector));
         driver.findElement(postedBySelector).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(postedByMenuItem));
         driver.findElement(postedByMenuItem).click();
+    }
+
+    public void setJobTypeFullTime() {
+        wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.presenceOfElementLocated(jobTypeSelector));
+        driver.findElement(jobTypeSelector).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(jobTypeMenuItem));
+        driver.findElement(jobTypeMenuItem).click();
+    }
+    public void setDatePosted14Days() {
+        wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.presenceOfElementLocated(datePostedSelector));
+        driver.findElement(datePostedSelector).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(datePostedMenuItem14days));
+        driver.findElement(datePostedMenuItem14days).click();
     }
     public String getRemoteJobsPillStyle() {
         return driver.findElement(remoteJobsSelector).getCssValue("background-color");
+    }
+    public String postedByPillStyle() {
+        return driver.findElement(postedBySelector).getCssValue("background-color");
+    }
+    public String jobTypePillStyle() {
+        return driver.findElement(jobTypeSelector).getCssValue("background-color");
+    }
+    public String datePostedPillStyle() {
+        return driver.findElement(datePostedSelector).getCssValue("background-color");
     }
     public String getResultingNumberOfJobs() {
         return driver.findElement(resultingAmountOfJobs).getText();

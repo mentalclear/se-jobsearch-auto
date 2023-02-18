@@ -11,13 +11,32 @@ import static org.testng.Assert.assertTrue;
 public class IndeedWorkflowTests extends BaseTests {
     private SearchResultsPageOnIndeed searchResultsPage;
 
-    @Test(priority = 1)
+    //@Test(priority = 1)
+    @Test(enabled = false)
     public void searchIndeedJobsTest() {
         String jobTitle = "Quality Engineer";
-        String jobLocation = "Virginia, United States";
+        String jobLocation = "Maryland, United States";
         startHomePageSearch("https://www.indeed.com/jobs", jobTitle, jobLocation);
         // setSearchToRemoteJobs();
         setSearchToPostedByEmployer();
+        disableObstructingElement();
+
+        while (searchResultsPage.isPaginationNextVisible()) {
+            extractCompaniesData(jobTitle, jobLocation);
+            searchResultsPage.getToNextResultsPage();
+        }
+    }
+    @Test(priority = 1)
+    public void searchForVueDevJobsRemoteUSTest() {
+        String jobTitle = "vue.js";
+        String jobLocation = "United States";
+        startHomePageSearch("https://www.indeed.com/jobs", jobTitle, jobLocation);
+
+        setSearchToPostedByEmployer();
+        setSearchToRemoteJobs();
+        setSearchToJobTypeFullTime();
+        setSearchToDatePosted14Days();
+
         disableObstructingElement();
 
         while (searchResultsPage.isPaginationNextVisible()) {
@@ -49,13 +68,23 @@ public class IndeedWorkflowTests extends BaseTests {
         assertEquals(searchResultsPage.getRemoteJobsPillStyle(), "rgba(89, 89, 89, 1)");
         assertTrue(searchResultsPage.getResultingNumberOfJobs().contains("jobs"));
     }
-
     private void setSearchToPostedByEmployer() {
         searchResultsPage.setPostedByEmployer();
-        assertEquals(searchResultsPage.getRemoteJobsPillStyle(), "rgba(89, 89, 89, 1)");
+        assertEquals(searchResultsPage.postedByPillStyle(), "rgba(89, 89, 89, 1)");
         assertTrue(searchResultsPage.getResultingNumberOfJobs().contains("jobs"));
     }
 
+    private void setSearchToJobTypeFullTime() {
+        searchResultsPage.setJobTypeFullTime();
+        assertEquals(searchResultsPage.jobTypePillStyle(), "rgba(89, 89, 89, 1)");
+        assertTrue(searchResultsPage.getResultingNumberOfJobs().contains("jobs"));
+    }
+
+    private void setSearchToDatePosted14Days() {
+        searchResultsPage.setDatePosted14Days();
+        assertEquals(searchResultsPage.datePostedPillStyle(), "rgba(89, 89, 89, 1)");
+        assertTrue(searchResultsPage.getResultingNumberOfJobs().contains("jobs"));
+    }
     private void disableObstructingElement(){
         searchResultsPage.setAnnoyingElementToHidden();
         assertTrue(!searchResultsPage.isAnnoyingElementVisible());
