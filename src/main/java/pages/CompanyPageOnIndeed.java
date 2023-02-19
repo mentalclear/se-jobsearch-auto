@@ -5,6 +5,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.CsvFileWriter;
 import utils.WaitManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CompanyPageOnIndeed {
     private WebDriver driver;
     private By companyName = By.xpath("//div[@itemprop='name']");
@@ -18,16 +21,17 @@ public class CompanyPageOnIndeed {
     public void closePage() {
         driver.close();
     }
-    public void storeCompanyInfo() {
+    public void storeCompanyInfo(CsvFileWriter fileWriter) {
         WaitManager waitManager = new WaitManager(driver, 5);
-        CsvFileWriter fileWriter = new CsvFileWriter();
         String companyUrl = "";
         String company = "";
 
         try {
             company = driver.findElement(companyName).getText();
             companyUrl = driver.findElement(companySiteUrl).getAttribute("href");
-        } catch (NoSuchElementException e) {}
+        } catch (NoSuchElementException e) {
+            System.out.println("Couldn't locate company or company URL... But this is possible on Indeed");
+        }
 
         if (!companyUrl.isEmpty()) fileWriter.writeDataToCSV(company, companyUrl);
         scrollThePage();
