@@ -28,7 +28,7 @@ public class IndeedWorkflowTests extends BaseTests {
     }
     // @Test(enabled = false)
     @Test(dataProvider = "SearchTermsQE", priority = 1)
-    public void searchIndeedJobsQE_VA_Test(String jTitle, String jLocation) {
+    public void searchIndeedJobsQETest(String jTitle, String jLocation) {
         String jobTitle = jTitle;
         String jobLocation = jLocation;
         CsvFileWriter outputFile = new CsvFileWriter(
@@ -50,11 +50,15 @@ public class IndeedWorkflowTests extends BaseTests {
                 {"vue.js", "United States"},
                 {"vuejs", "United States"},
                 {"nuxt", "United States"},
+                {"react", "United States"},
+                {"react.js", "United States"},
+                {"next.js", "United States"},
+                {"nextjs", "United States"}
         };
     }
 
     @Test(dataProvider = "SearchTermsDev", priority = 2)
-    public void searchForVueJSDevJobsRemoteUSTest(String jTitle, String jLocation) {
+    public void searchForDevJobsRemoteUSTest(String jTitle, String jLocation) {
         String jobTitle = jTitle;
         String jobLocation = jLocation;
         CsvFileWriter outputFile = new CsvFileWriter(
