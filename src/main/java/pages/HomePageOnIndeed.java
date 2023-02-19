@@ -32,13 +32,16 @@ public class HomePageOnIndeed {
         return driver.getTitle();
     }
 
-    public boolean isInputFieldPresent(String fieldName) {
-       By element = whatSearchField;
-       if (fieldName.equals("Where")) element = whereSearchField;
-       return driver.findElement(element).isDisplayed();
+    public boolean isWhatFieldPresent() {
+        return driver.findElement(whatSearchField).isDisplayed();
+    }
+
+    public boolean isWhereFieldPresent() {
+        return driver.findElement(whereSearchField).isDisplayed();
     }
 
     public boolean isSubmitButtonPresent() {
         return driver.findElement(findJobsButton).isDisplayed();
     }
+
 }
