@@ -8,13 +8,13 @@ import utils.WaitManager;
 public class SearchResultsPage {
     private WebDriver driver;
     private WebDriverWait wait;
-    private By remoteJobsSelector = By.id("filter-remotejob");
-    private By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
-    private By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
-    private By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li");
+    private final By remoteJobsSelector = By.id("filter-remotejob");
+    private final By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
+    private final By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
+    private final By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li");
     // private By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li/descendant-or-self::a");
-    private By companyNameLink = By.xpath("//div[@data-company-name]/a");
-    private By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
+    private final By companyNameLink = By.xpath("//div[@data-company-name]/a");
+    private final By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
 
 
     public SearchResultsPage(WebDriver driver) {
