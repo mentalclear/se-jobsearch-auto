@@ -12,10 +12,8 @@ public class SearchResultsPageOnIndeed {
     private By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
     private By postedBySelector = By.id("filter-srctype");
     private By postedByMenuItem = By.xpath("//ul[@id='filter-srctype-menu']/li");
-
     private By jobTypeSelector = By.id("filter-jobtype");
     private By jobTypeMenuItem = By.xpath("//ul[@id='filter-jobtype-menu']/li");
-
     private By datePostedSelector = By.id("filter-dateposted");
     private By datePostedMenuItem14days = By.xpath("//ul[@id='filter-dateposted-menu']/li[4]");
     private By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
@@ -23,6 +21,7 @@ public class SearchResultsPageOnIndeed {
     private By companyNameLink = By.xpath("//div[@data-company-name]/a");
     private By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
     private By annoyingElement = By.xpath("//div[contains(@class, 'jobsearch-JapanSnackBarContainer-toastWrapper')]");
+    private By footerContainer = By.id("gnav-footer-container");
 
 
     public SearchResultsPageOnIndeed(WebDriver driver) {
@@ -34,10 +33,14 @@ public class SearchResultsPageOnIndeed {
 
     public void setRemoteJobs() {
         wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsSelector));
-        driver.findElement(remoteJobsSelector).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsMenuItem));
-        driver.findElement(remoteJobsMenuItem).click();
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsSelector));
+            driver.findElement(remoteJobsSelector).click();
+            wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsMenuItem));
+            driver.findElement(remoteJobsMenuItem).click();
+        } catch (NoSuchElementException e) {
+            System.out.println("Remote job selector isn't visible... but we can proceed");
+        }
     }
     public void setPostedByEmployer() {
         wait = new WebDriverWait(driver, 5);
@@ -108,7 +111,7 @@ public class SearchResultsPageOnIndeed {
     }
     public void scrollThePage() {
         WaitManager waitManager = new WaitManager(driver, 2);
-        var bottomPageElement = driver.findElement(paginationNext);
+        var bottomPageElement = driver.findElement(footerContainer);
         String script = "arguments[0].scrollIntoView({behavior: 'smooth'})";
         ((JavascriptExecutor)driver).executeScript(script, bottomPageElement);
         waitManager.dummyWait();

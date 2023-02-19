@@ -1,67 +1,99 @@
 package indeed.workflow;
 
 import base.BaseTests;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.CompanyPageOnIndeed;
 import pages.SearchResultsPageOnIndeed;
+import utils.CsvFileWriter;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class IndeedWorkflowTests extends BaseTests {
     private SearchResultsPageOnIndeed searchResultsPage;
-
-    //@Test(priority = 1)
-    @Test(enabled = false)
-    public void searchIndeedJobsTest() {
-        String jobTitle = "Quality Engineer";
-        String jobLocation = "Maryland, United States";
-        startHomePageSearch("https://www.indeed.com/jobs", jobTitle, jobLocation);
-        // setSearchToRemoteJobs();
-        setSearchToPostedByEmployer();
-        disableObstructingElement();
-
-        while (searchResultsPage.isPaginationNextVisible()) {
-            extractCompaniesData(jobTitle, jobLocation);
-            searchResultsPage.getToNextResultsPage();
-        }
+    @DataProvider(name = "SearchTermsQE")
+    public Object[][] createQEData(){
+        return new Object[][] {
+                {"Quality Engineer", "Virginia, United States"},
+                {"Quality Engineer", "Maryland, United States"},
+                {"Quality Engineer", "Washington DC, United States"},
+                {"Software Quality Engineer", "Virginia, United States"},
+                {"Software Quality Engineer", "Maryland, United States"},
+                {"Software Quality Engineer", "Washington DC, United States"},
+                {"Software Tester", "Virginia, United States"},
+                {"Software Tester", "Maryland, United States"},
+                {"Software Tester", "Washington DC, United States"}
+        };
     }
-    @Test(priority = 1)
-    public void searchForVueDevJobsRemoteUSTest() {
-        String jobTitle = "vue.js";
-        String jobLocation = "United States";
-        startHomePageSearch("https://www.indeed.com/jobs", jobTitle, jobLocation);
+    // @Test(enabled = false)
+    @Test(dataProvider = "SearchTermsQE", priority = 1)
+    public void searchIndeedJobsQE_VA_Test(String jTitle, String jLocation) {
+        String jobTitle = jTitle;
+        String jobLocation = jLocation;
+        CsvFileWriter outputFile = new CsvFileWriter(
+                getClearedTitle(jobTitle) + "_" + getClearedTitle(jobLocation));
 
+        startHomePageSearch(jobTitle, jobLocation);
         setSearchToPostedByEmployer();
-        setSearchToRemoteJobs();
         setSearchToJobTypeFullTime();
         setSearchToDatePosted14Days();
 
         disableObstructingElement();
+        extractCompaniesData(jobTitle, jobLocation, outputFile);
+    }
 
-        while (searchResultsPage.isPaginationNextVisible()) {
-            extractCompaniesData(jobTitle, jobLocation);
-            searchResultsPage.getToNextResultsPage();
+    @DataProvider(name = "SearchTermsDev")
+    public Object[][] createDevData(){
+        return new Object[][] {
+                {"vue", "United States"},
+                {"vue.js", "United States"},
+                {"vuejs", "United States"},
+                {"nuxt", "United States"},
+        };
+    }
+
+    @Test(dataProvider = "SearchTermsDev", priority = 2)
+    public void searchForVueJSDevJobsRemoteUSTest(String jTitle, String jLocation) {
+        String jobTitle = jTitle;
+        String jobLocation = jLocation;
+        CsvFileWriter outputFile = new CsvFileWriter(
+                getClearedTitle(jobTitle) + "_" + getClearedTitle(jobLocation));
+
+        startHomePageSearch(jobTitle, jobLocation);
+        setSearchToPostedByEmployer();
+        setSearchToJobTypeFullTime();
+        setSearchToRemoteJobs();
+        setSearchToDatePosted14Days();
+
+        disableObstructingElement();
+        extractCompaniesData(jobTitle, jobLocation, outputFile);
+    }
+    private void extractCompaniesData(String jobTitle, String jobLocation, CsvFileWriter file) {
+        int linksToProcess = searchResultsPage.getResultsSize();
+        while(linksToProcess > 0) {
+            for (int i = 0; i < searchResultsPage.getResultsSize(); i++) {
+                if (i == 5 || i == 11 || i == 17) continue;
+                searchResultsPage.scrollThePage();
+                CompanyPageOnIndeed companyPage = searchResultsPage.clickListItemCompanyLink(i);
+                if (companyPage == null) continue;
+                getWindowManager().switchToNewTab();
+                companyPage.storeCompanyInfo(file);
+                companyPage.closePage();
+                getWindowManager().switchToTab(jobTitle + " Jobs, Employment in "+ jobLocation +" | Indeed.com");
+                linksToProcess--;
+            }
+            if (searchResultsPage.isPaginationNextVisible()) {
+                searchResultsPage.getToNextResultsPage();
+                linksToProcess = searchResultsPage.getResultsSize();
+            }
         }
     }
-    private void extractCompaniesData(String jobTitle, String jobLocation) {
-        int resultsSize = searchResultsPage.getResultsSize();
-        for (int i = 0; i < resultsSize-1; i++) {
-            if (i == 5 || i == 11) continue;
-            searchResultsPage.scrollThePage();
-            CompanyPageOnIndeed companyPage = searchResultsPage.clickListItemCompanyLink(i);
-            if (companyPage == null) continue;
-            getWindowManager().switchToNewTab();
-            companyPage.storeCompanyInfo();
-            companyPage.closePage();
-            getWindowManager().switchToTab(jobTitle + " Jobs, Employment in "+ jobLocation +" | Indeed.com");
-        }
-    }
-    private void startHomePageSearch(String jobSearchUrl, String jobTitle, String jobLocation) {
+    private void startHomePageSearch(String jobTitle, String jobLocation) {
         homePageOnIndeed.populateWhatField(jobTitle);
         homePageOnIndeed.populateWhereField(jobLocation);
         searchResultsPage = homePageOnIndeed.clickFindJobs();
-        assertTrue(searchResultsPage.getCurrentUrl().contains(jobSearchUrl));
+        assertTrue(searchResultsPage.getCurrentUrl().contains("https://www.indeed.com/jobs"));
     }
     private void setSearchToRemoteJobs() {
         searchResultsPage.setRemoteJobs();
@@ -88,5 +120,8 @@ public class IndeedWorkflowTests extends BaseTests {
     private void disableObstructingElement(){
         searchResultsPage.setAnnoyingElementToHidden();
         assertTrue(!searchResultsPage.isAnnoyingElementVisible());
+    }
+    private String getClearedTitle(String title) {
+        return title.trim().replaceAll("[,.\\s]", "_");
     }
 }

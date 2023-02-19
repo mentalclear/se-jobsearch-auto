@@ -21,20 +21,19 @@ public class CompanyPageOnIndeed {
     public void closePage() {
         driver.close();
     }
-    public void storeCompanyInfo() {
+    public void storeCompanyInfo(CsvFileWriter fileWriter) {
         WaitManager waitManager = new WaitManager(driver, 5);
-        CsvFileWriter fileWriter = new CsvFileWriter();
         String companyUrl = "";
         String company = "";
-        List<String> companiesFound = new ArrayList<>();
 
         try {
             company = driver.findElement(companyName).getText();
-            if (!companiesFound.contains(company)) companiesFound.add(company);
             companyUrl = driver.findElement(companySiteUrl).getAttribute("href");
-        } catch (NoSuchElementException e) {}
+        } catch (NoSuchElementException e) {
+            System.out.println("Couldn't locate company or company URL... But this is possible on Indeed");
+        }
 
-        if (!companyUrl.isEmpty() || companiesFound.contains(company)) fileWriter.writeDataToCSV(company, companyUrl);
+        if (!companyUrl.isEmpty()) fileWriter.writeDataToCSV(company, companyUrl);
         scrollThePage();
 
         // indeed.com gets triggered when pages are opened too fast this slows the process a little.
