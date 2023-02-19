@@ -8,20 +8,20 @@ import utils.WaitManager;
 public class SearchResultsPageOnIndeed {
     private WebDriver driver;
     private WebDriverWait wait;
-    private By remoteJobsSelector = By.id("filter-remotejob");
-    private By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
-    private By postedBySelector = By.id("filter-srctype");
-    private By postedByMenuItem = By.xpath("//ul[@id='filter-srctype-menu']/li");
-    private By jobTypeSelector = By.id("filter-jobtype");
-    private By jobTypeMenuItem = By.xpath("//ul[@id='filter-jobtype-menu']/li");
-    private By datePostedSelector = By.id("filter-dateposted");
-    private By datePostedMenuItem14days = By.xpath("//ul[@id='filter-dateposted-menu']/li[4]");
-    private By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
-    private By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li");
-    private By companyNameLink = By.xpath("//div[@data-company-name]/a");
-    private By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
-    private By annoyingElement = By.xpath("//div[contains(@class, 'jobsearch-JapanSnackBarContainer-toastWrapper')]");
-    private By footerContainer = By.id("gnav-footer-container");
+    private final By remoteJobsSelector = By.id("filter-remotejob");
+    private final By remoteJobsMenuItem = By.xpath("//ul[@id='filter-remotejob-menu']/li");
+    private final By postedBySelector = By.id("filter-srctype");
+    private final By postedByMenuItem = By.xpath("//ul[@id='filter-srctype-menu']/li");
+    private final By jobTypeSelector = By.id("filter-jobtype");
+    private final By jobTypeMenuItem = By.xpath("//ul[@id='filter-jobtype-menu']/li");
+    private final By datePostedSelector = By.id("filter-dateposted");
+    private final By datePostedMenuItem14days = By.xpath("//ul[@id='filter-dateposted-menu']/li[4]");
+    private final By resultingAmountOfJobs = By.xpath("//div[@class='jobsearch-JobCountAndSortPane-jobCount']/span[1]");
+    private final By searchResultsItems = By.xpath("//ul[@class='jobsearch-ResultsList css-0']/li");
+    private final By companyNameLink = By.xpath("//div[@data-company-name]/a");
+    private final By paginationNext = By.xpath("//a[@data-testid='pagination-page-next']");
+    private final By annoyingElement = By.xpath("//div[contains(@class, 'jobsearch-JapanSnackBarContainer-toastWrapper')]");
+    private final By footerContainer = By.id("gnav-footer-container");
 
 
     public SearchResultsPageOnIndeed(WebDriver driver) {
@@ -44,10 +44,15 @@ public class SearchResultsPageOnIndeed {
     }
     public void setPostedByEmployer() {
         wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.presenceOfElementLocated(postedBySelector));
-        driver.findElement(postedBySelector).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(postedByMenuItem));
-        driver.findElement(postedByMenuItem).click();
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(postedBySelector));
+            driver.findElement(postedBySelector).click();
+            wait.until(ExpectedConditions.presenceOfElementLocated(postedByMenuItem));
+            driver.findElement(postedByMenuItem).click();
+        } catch (NoSuchElementException | TimeoutException e) {
+            System.out.println("'Posted By' pill is not there or inactive, this happens... we can move on");
+        }
+
     }
 
     public void setJobTypeFullTime() {

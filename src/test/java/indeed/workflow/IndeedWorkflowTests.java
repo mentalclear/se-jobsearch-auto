@@ -75,7 +75,7 @@ public class IndeedWorkflowTests extends BaseTests {
     }
     private void extractCompaniesData(String jobTitle, String jobLocation, CsvFileWriter file) {
         int linksToProcess = searchResultsPage.getResultsSize();
-        while(linksToProcess > 0) {
+        while(linksToProcess > 1) {
             for (int i = 0; i < searchResultsPage.getResultsSize(); i++) {
                 if (i == 5 || i == 11 || i == 17) continue;
                 searchResultsPage.scrollThePage();
