@@ -23,51 +23,34 @@ public class SearchResultsPageOnIndeed {
     private final By annoyingElement = By.xpath("//div[contains(@class, 'jobsearch-JapanSnackBarContainer-toastWrapper')]");
     private final By footerContainer = By.id("gnav-footer-container");
 
-
     public SearchResultsPageOnIndeed(WebDriver driver) {
         this.driver = driver;
     }
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }
-
     public void setRemoteJobs() {
-        wait = new WebDriverWait(driver, 5);
-        try {
-            wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsSelector));
-            driver.findElement(remoteJobsSelector).click();
-            wait.until(ExpectedConditions.presenceOfElementLocated(remoteJobsMenuItem));
-            driver.findElement(remoteJobsMenuItem).click();
-        } catch (NoSuchElementException e) {
-            System.out.println("Remote job selector isn't visible... but we can proceed");
-        }
+        setSearchOption(remoteJobsSelector, remoteJobsMenuItem);
     }
     public void setPostedByEmployer() {
-        wait = new WebDriverWait(driver, 5);
-        try {
-            wait.until(ExpectedConditions.presenceOfElementLocated(postedBySelector));
-            driver.findElement(postedBySelector).click();
-            wait.until(ExpectedConditions.presenceOfElementLocated(postedByMenuItem));
-            driver.findElement(postedByMenuItem).click();
-        } catch (NoSuchElementException | TimeoutException e) {
-            System.out.println("'Posted By' pill is not there or inactive, this happens... we can move on");
-        }
-
+        setSearchOption(postedBySelector, postedByMenuItem);
     }
-
     public void setJobTypeFullTime() {
-        wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.presenceOfElementLocated(jobTypeSelector));
-        driver.findElement(jobTypeSelector).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(jobTypeMenuItem));
-        driver.findElement(jobTypeMenuItem).click();
+        setSearchOption(jobTypeSelector, jobTypeMenuItem);
     }
     public void setDatePosted14Days() {
+        setSearchOption(datePostedSelector, datePostedMenuItem14days);
+    }
+    private void setSearchOption(By searchPillSelector, By searchPillMenuItem) {
         wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.presenceOfElementLocated(datePostedSelector));
-        driver.findElement(datePostedSelector).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(datePostedMenuItem14days));
-        driver.findElement(datePostedMenuItem14days).click();
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(searchPillSelector));
+            driver.findElement(searchPillSelector).click();
+            wait.until(ExpectedConditions.presenceOfElementLocated(searchPillMenuItem));
+            driver.findElement(searchPillMenuItem).click();
+        } catch (NoSuchElementException e) {
+            System.out.printf("Selector %s isn't visible... but we can proceed", searchPillSelector);
+        }
     }
     public String getRemoteJobsPillStyle() {
         return driver.findElement(remoteJobsSelector).getCssValue("background-color");
