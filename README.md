@@ -9,3 +9,11 @@ Indeed doesn't allow their job search API to be used, so this is the only way, l
 
 It's not perfect in any sense but it works.
 
+#### Setup Instrucitons
+
+_Requirements: Java 11+, IntelliJ, git_
+
+1. Clone the repository to a folder on the local drive
+2. Open the project in the IntlliJ
+3. Open `pom.xml` file and refresh Maven dependencies. 
+4. Enjoy :)
