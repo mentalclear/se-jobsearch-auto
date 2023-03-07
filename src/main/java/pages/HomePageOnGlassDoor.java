@@ -14,6 +14,7 @@ public class HomePageOnGlassDoor {
 
     private By emailSignInFormField = By.id("inlineUserEmail");
     private By emailSubmitButton = By.xpath("//button[@data-testid='email-form-button']");
+    private By passwordFormHeader = By.xpath("//h2[text()='Welcome back to Glassdoor.']");
     private By passwordLabel = By.xpath("//label[@for='inlineUserPassword']");
     private By passwordSignInFormField = By.xpath("//input[@data-test='passwordInput']");
     private By signInButton = By.xpath("//div[@class='slider-enter-done']//div//div//button");
@@ -31,29 +32,25 @@ public class HomePageOnGlassDoor {
         driver.findElement(emailSubmitButton).click();
     }
     public void populatePasswordField(String password){
-        scrollPageDown();
-
         wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(passwordLabel)));
-        System.out.println(driver.findElement(passwordLabel).isDisplayed());
-        var labelElement = driver.findElement(passwordLabel);
-        labelElement.click();
-
+        activatePasswordInput();
         wait.until(ExpectedConditions.presenceOfElementLocated(passwordSignInFormField));
         wait.until(ExpectedConditions.elementToBeClickable(passwordSignInFormField));
         var element = driver.findElement(passwordSignInFormField);
         element.sendKeys(password);
     }
-    private void scrollPageDown() {
-        var bottomPageElement = driver.findElement(By.id("FooterModule"));
-        String script = "arguments[0].scrollIntoView({behavior: 'smooth'})";
-        ((JavascriptExecutor)driver).executeScript(script, bottomPageElement);
+    private void activatePasswordInput() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordFormHeader));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordLabel));
+        var labelElement = driver.findElement(passwordLabel);
+        labelElement.click();
     }
-    public SearchResultsPageOnGlassDoor clickSignInButton(){
+
+    public SignedInPageOnGlassDoor clickSignInButton(){
         driver.findElement(signInButton).click();
         wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.
                 visibilityOfElementLocated(By.xpath("//div[@data-test='profile-container']")));
-        return new SearchResultsPageOnGlassDoor(driver);
+        return new SignedInPageOnGlassDoor(driver);
     }
 }
