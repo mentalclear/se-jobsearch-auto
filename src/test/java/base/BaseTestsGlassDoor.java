@@ -58,10 +58,10 @@ public class BaseTestsGlassDoor {
         driver.get("https://www.glassdoor.com/index.htm");
     }
 
-//    @AfterClass
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
+    }
 
     @AfterMethod
     public void recordFailure(ITestResult result) throws IOException {
