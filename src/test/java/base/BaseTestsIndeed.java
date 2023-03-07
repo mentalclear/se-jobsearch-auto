@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class BaseTests {
+public class BaseTestsIndeed {
     // private WebDriver driver; // Without listener
     private EventFiringWebDriver driver;
     protected HomePageOnIndeed homePageOnIndeed;

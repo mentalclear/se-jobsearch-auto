@@ -1,6 +1,6 @@
 package indeed.workflow;
 
-import base.BaseTests;
+import base.BaseTestsIndeed;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.CompanyPageOnIndeed;
@@ -10,7 +10,7 @@ import utils.CsvFileWriter;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class IndeedWorkflowTests extends BaseTests {
+public class IndeedWorkflowTests extends BaseTestsIndeed {
     private SearchResultsPageOnIndeed searchResultsPage;
     @DataProvider(name = "SearchTermsQE")
     public Object[][] createQEData(){
