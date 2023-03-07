@@ -3,14 +3,11 @@ package glassdoor.workflow;
 import base.BaseTestsGlassDoor;
 import org.testng.annotations.Test;
 import pages.AllSearchResultPage;
-import pages.CompanyPageOnIndeed;
-import pages.SearchResultsPageOnIndeed;
+import pages.AllSearchResultPage.*;
 import pages.SignedInPageOnGlassDoor;
 import utils.CsvFileWriter;
-
-import javax.sound.midi.Soundbank;
-
 import static org.testng.Assert.*;
+
 
 public class GlassDoorWorkflow extends BaseTestsGlassDoor {
     private SignedInPageOnGlassDoor signedInPageOnGlassDoor;
@@ -31,16 +28,15 @@ public class GlassDoorWorkflow extends BaseTestsGlassDoor {
         allSearchResultsPage.setJobTypeFilterFullTime();
         allSearchResultsPage.setJobPostedTime2Weeks();
 
-        extractCompaniesData(searchTerm, searchLocation, outputFile);
+        extractCompaniesData(outputFile);
     }
 
-    private void extractCompaniesData(String jobTitle, String jobLocation, CsvFileWriter file) {
+    private void extractCompaniesData(CsvFileWriter file) {
         int linksToProcess = allSearchResultsPage.getResultsSize();
-        while(linksToProcess > 1) {
+        while(linksToProcess > 0) {
             for (int i = 0; i < allSearchResultsPage.getResultsSize(); i++) {
-                CompanyPageOnIndeed companyPage = allSearchResultsPage.clickListItemCompanyLink(i);
-                if (companyPage == null) continue;
-                companyPage.storeCompanyInfo(file);
+                CompanyProfilePane companyProfilePane = allSearchResultsPage.clickListItemCompanyLink(i);
+                companyProfilePane.storeCompanyInfo(file);
                 linksToProcess--;
             }
             if (allSearchResultsPage.isPaginationNextVisible()) {
