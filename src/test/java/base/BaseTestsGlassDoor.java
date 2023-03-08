@@ -12,10 +12,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import pages.HomePageOnGlassDoor;
-import pages.HomePageOnIndeed;
-import utils.CookieManager;
 import utils.EventReporter;
-import utils.WindowManager;
+import utils.OSSelector;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,30 +37,20 @@ public class BaseTestsGlassDoor {
     }
 
     public static void selectWebDriverForOS() {
+        var os = new OSSelector();
         String selectedDriver = "chromedriver";
-        if(isLinux()) selectedDriver = "linux/chromedriver";
-        if(isWindows()) selectedDriver = "windows/chromedriver.exe";
+        if(os.isLinux()) selectedDriver = "linux/chromedriver";
+        if(os.isWindows()) selectedDriver = "windows/chromedriver.exe";
         System.setProperty("webdriver.chrome.driver", "resources/driver/" + selectedDriver);
     }
-
-    private static boolean isWindows() {
-        return System.getProperty("os.name").contains("Windows");
-    }
-
-    private static boolean isLinux() {
-        return System.getProperty("os.name").contains("Linux");
-    }
-
     @BeforeMethod
     public void goHome() {
         driver.get("https://www.glassdoor.com/index.htm");
     }
-
     @AfterClass
     public void tearDown() {
         driver.quit();
     }
-
     @AfterMethod
     public void recordFailure(ITestResult result) throws IOException {
         if (ITestResult.FAILURE == result.getStatus()) {
@@ -71,7 +59,6 @@ public class BaseTestsGlassDoor {
             Files.move(screenshot, new File("resources/screenshots/" + result.getName() + ".png"));
         }
     }
-
     private ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
         String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
@@ -79,12 +66,5 @@ public class BaseTestsGlassDoor {
         options.addArguments("start-maximized", "user-agent="+userAgent, "disable-infobars");
         // options.setHeadless(true); // Running in headless mode
         return options;
-    }
-    public CookieManager getCookieManager(){
-        return new CookieManager(driver);
-    }
-
-    public WindowManager getWindowManager() {
-        return new WindowManager(driver);
     }
 }
