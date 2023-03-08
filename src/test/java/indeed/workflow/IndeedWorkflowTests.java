@@ -15,15 +15,9 @@ public class IndeedWorkflowTests extends BaseTests {
     @DataProvider(name = "SearchTermsQE")
     public Object[][] createQEData(){
         return new Object[][] {
-                {"Quality Engineer", "Virginia, United States"},
-                {"Quality Engineer", "Maryland, United States"},
-                {"Quality Engineer", "Washington DC, United States"},
-                {"Software Quality Engineer", "Virginia, United States"},
-                {"Software Quality Engineer", "Maryland, United States"},
-                {"Software Quality Engineer", "Washington DC, United States"},
-                {"Software Tester", "Virginia, United States"},
-                {"Software Tester", "Maryland, United States"},
-                {"Software Tester", "Washington DC, United States"}
+                {"QA Manager", "Virginia, United States"},
+                {"QA Manager", "Maryland, United States"},
+                {"QA Manager", "Washington DC, United States"},
         };
     }
     // @Test(enabled = false)
@@ -39,7 +33,7 @@ public class IndeedWorkflowTests extends BaseTests {
         setSearchToJobTypeFullTime();
         setSearchToDatePosted14Days();
 
-        disableObstructingElement();
+        // disableObstructingElement();
         extractCompaniesData(jobTitle, jobLocation, outputFile);
     }
 
