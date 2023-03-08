@@ -6,17 +6,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BufferResultsPageOnGlassDoor {
-    private WebDriver driver;
-    private WebDriverWait wait;
+    private final WebDriver driver;
 
     public BufferResultsPageOnGlassDoor(WebDriver driver) {
         this.driver = driver;
     }
 
-    By seeAllJobsLink = By.xpath("//a[@data-test='jobs-location-see-all-link']");
+    private final By seeAllJobsLink = By.xpath("//a[@data-test='jobs-location-see-all-link']");
 
     public AllSearchResultPage clickSeeAllJobsLink(){
-        wait = new WebDriverWait(driver, 5);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(seeAllJobsLink));
         driver.findElement(seeAllJobsLink).click();
 

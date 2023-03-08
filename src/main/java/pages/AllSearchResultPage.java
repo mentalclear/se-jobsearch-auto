@@ -6,21 +6,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.CsvFileWriter;
 
 public class AllSearchResultPage {
-    private WebDriver driver;
+    private final WebDriver driver;
     private WebDriverWait wait;
-
     public AllSearchResultPage(WebDriver driver) {
         this.driver = driver;
     }
-    private By filterJobType = By.id("filter_jobType");
-    private By fullTimeOption = By.xpath("//button[@value='fulltime']");
-    private By fullTimeSelectedOption = By.xpath("//div[@data-test='JOBTYPE']//span[text()='Full-time']");
-    private By filterPostedTime = By.id("filter_fromAge");
-    private By postedTime2WeeksOption = By.xpath("//button[@value='14']");
-    private By twoWeeksSelectedOption = By.xpath("//div[@data-test='DATEPOSTED']//span[text()='Last 2 Weeks']");
-    private By resultingAmountOfJobs = By.xpath("//h1[@data-test='jobCount-H1title']");
-    private By jobResultsList = By.xpath("//ul[@data-test='jlGrid']//li");
-    private By paginationNextButton = By.xpath("//button[@data-test='pagination-next']");
+    private final By filterJobType = By.id("filter_jobType");
+    private final By fullTimeOption = By.xpath("//button[@value='fulltime']");
+    private final By fullTimeSelectedOption = By.xpath("//div[@data-test='JOBTYPE']//span[text()='Full-time']");
+    private final By filterPostedTime = By.id("filter_fromAge");
+    private final By postedTime2WeeksOption = By.xpath("//button[@value='14']");
+    private final By twoWeeksSelectedOption = By.xpath("//div[@data-test='DATEPOSTED']//span[text()='Last 2 Weeks']");
+    private final By jobResultsList = By.xpath("//ul[@data-test='jlGrid']//li");
+    private final By paginationNextButton = By.xpath("//button[@data-test='pagination-next']");
 
     public void setJobTypeFilterFullTime(){
         setJobFilter(filterJobType, fullTimeOption, fullTimeSelectedOption);
@@ -29,15 +27,11 @@ public class AllSearchResultPage {
         setJobFilter(filterPostedTime, postedTime2WeeksOption, twoWeeksSelectedOption);
     }
     private void setJobFilter(By selector, By option, By result){
-        wait = new WebDriverWait(driver, 5);
+        wait = new WebDriverWait(driver, 15);
         driver.findElement(selector).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(option));
         driver.findElement(option).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(result));
-    }
-
-    public String getResultingNumberOfJobs() {
-        return driver.findElement(resultingAmountOfJobs).getText().split(" ")[0];
     }
     public int getResultsSize() {
         return driver.findElements(jobResultsList).size();
@@ -50,7 +44,7 @@ public class AllSearchResultPage {
         driver.findElement(paginationNextButton).click();
     }
     public CompanyProfilePane clickListItemCompanyLink(int index) {
-        wait = new WebDriverWait(driver, 5);
+        wait = new WebDriverWait(driver, 15);
         clickSearchResultCard(index);
         return new CompanyProfilePane(driver);
     }
@@ -60,15 +54,15 @@ public class AllSearchResultPage {
         searchResultsElement.click();
     }
     public class CompanyProfilePane{
-        private WebDriver driver;
-        private By companyName = By.xpath("//div[@data-test='employerName']");
-        private By companySiteUrl = By.cssSelector("div#CompanyContainer a");
+        private final WebDriver driver;
+        private final By companyName = By.xpath("//div[@data-test='employerName']");
+        private final By companySiteUrl = By.cssSelector("div#CompanyContainer a");
 
         public CompanyProfilePane(WebDriver driver) {
             this.driver = driver;
         }
         public void storeCompanyInfo(CsvFileWriter fileWriter) {
-            wait = new WebDriverWait(driver, 5);
+            wait = new WebDriverWait(driver, 15);
             String companyUrl = "";
             String company = "";
             try {
