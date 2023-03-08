@@ -7,7 +7,7 @@ public class CsvFileWriter {
     private final String csvFilePath;
 
     public CsvFileWriter(String csvFileName) {
-        csvFilePath = String.format("resources/data/companiesHiring_%s.csv", csvFileName);
+        csvFilePath = String.format("resources/data/hiringCos_%s.csv", csvFileName);
     }
 
     public void writeDataToCSV(String companyName, String companyUrl) {
