@@ -67,7 +67,7 @@ public class AllSearchResultPage {
             String company = "";
             try {
                 wait.until(ExpectedConditions.visibilityOfElementLocated(companyName));
-                company = driver.findElement(companyName).getText().split("\n| ")[0];
+                company = driver.findElement(companyName).getText().split("\n")[0];
                 companyUrl = driver.findElement(companySiteUrl).getAttribute("href");
             } catch (NoSuchElementException e) {
                 System.out.println("Couldn't locate company or company URL... That happens, it's Ok! ");
