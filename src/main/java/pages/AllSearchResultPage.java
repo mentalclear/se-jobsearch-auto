@@ -27,7 +27,7 @@ public class AllSearchResultPage {
         setJobFilter(filterPostedTime, postedTime2WeeksOption, twoWeeksSelectedOption);
     }
     private void setJobFilter(By selector, By option, By result){
-        wait = new WebDriverWait(driver, 15);
+        wait = new WebDriverWait(driver, 60);
         driver.findElement(selector).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(option));
         driver.findElement(option).click();
@@ -44,7 +44,7 @@ public class AllSearchResultPage {
         driver.findElement(paginationNextButton).click();
     }
     public CompanyProfilePane clickListItemCompanyLink(int index) {
-        wait = new WebDriverWait(driver, 15);
+        wait = new WebDriverWait(driver, 60);
         clickSearchResultCard(index);
         return new CompanyProfilePane(driver);
     }
@@ -62,7 +62,7 @@ public class AllSearchResultPage {
             this.driver = driver;
         }
         public void storeCompanyInfo(CsvFileWriter fileWriter) {
-            wait = new WebDriverWait(driver, 15);
+            wait = new WebDriverWait(driver, 60);
             String companyUrl = "";
             String company = "";
             try {
