@@ -11,7 +11,7 @@ import pages.SearchResultsPageOnIndeed;
 
 import java.util.concurrent.TimeUnit;
 
-import static base.BaseTestsIndeed.selectWebDriverForOS;
+import static base.BaseTests.selectWebDriverForOS;
 
 
 public class HomePageOnIndeedSteps {

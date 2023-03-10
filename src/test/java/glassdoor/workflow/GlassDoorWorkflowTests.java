@@ -1,7 +1,8 @@
 package glassdoor.workflow;
 
-import base.BaseTestsGlassDoor;
+import base.BaseTests;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.AllSearchResultPageGlassDoor;
@@ -11,13 +12,19 @@ import utils.CsvFileWriter;
 
 import static org.testng.Assert.*;
 
-public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
+public class GlassDoorWorkflowTests extends BaseTests {
     private SignedInPageOnGlassDoor signedInPageOnGlassDoor;
     private AllSearchResultPageGlassDoor allSearchResultsPage;
+    private static final String BASE_APP_URL = "https://www.glassdoor.com/index.htm";
 
     @BeforeClass
     public void setupGlassDoorSuite() {
         openGlassDoorAndSignIn();
+    }
+
+    @BeforeMethod
+    public void setupGlassDoorTest() {
+        goHome(BASE_APP_URL);
     }
 
     @DataProvider(name = "SearchTermQE-US")
@@ -47,12 +54,12 @@ public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
     @DataProvider(name = "SearchTermsQE")
     public Object[][] createQEData() {
         return new Object[][]{
-                {"Quality Engineer", "United States"},
-                {"Software QA", "United States"},
+//                {"Quality Engineer", "United States"},
+//                {"Software QA", "United States"},
                 {"QA Engineer", "United States"},
-                {"Software Quality Engineer", "United States"},
-                {"Software Tester", "United States"},
-                {"Software Test Engineer", "United States"}
+//                {"Software Quality Engineer", "United States"},
+//                {"Software Tester", "United States"},
+//                {"Software Test Engineer", "United States"}
         };
     }
 
@@ -87,6 +94,7 @@ public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
     }
 
     private void openGlassDoorAndSignIn() {
+        goHome(BASE_APP_URL);
         homePageOnGlassDoor.populateEmailField("testmeup007@gmail.com");
         homePageOnGlassDoor.clickEmailSubmitButton();
         homePageOnGlassDoor.populatePasswordField("VerySecretPA$$word2023");

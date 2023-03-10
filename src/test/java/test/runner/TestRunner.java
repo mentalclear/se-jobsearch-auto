@@ -10,7 +10,6 @@ import org.testng.annotations.DataProvider;
         tags = ""
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
-
         @Override
         @DataProvider(parallel = false)
         // @DataProvider(parallel = true) // Multithreading

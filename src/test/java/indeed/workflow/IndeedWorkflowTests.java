@@ -1,6 +1,8 @@
 package indeed.workflow;
 
-import base.BaseTestsIndeed;
+import base.BaseTests;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.CompanyPageOnIndeed;
@@ -10,8 +12,20 @@ import utils.CsvFileWriter;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class IndeedWorkflowTests extends BaseTestsIndeed {
+public class IndeedWorkflowTests extends BaseTests {
     private SearchResultsPageOnIndeed searchResultsPage;
+    private static final String BASE_APP_URL = "https://www.indeed.com/";
+
+    @BeforeClass
+    public void setupIndeedSuite(){
+        goHome(BASE_APP_URL);
+    }
+
+    @BeforeMethod
+    public void setupIndeedTest(){
+        goHome(BASE_APP_URL);
+    }
+
     @DataProvider(name = "SearchTermsQE")
     public Object[][] createQEData(){
         return new Object[][] {
@@ -29,18 +43,16 @@ public class IndeedWorkflowTests extends BaseTestsIndeed {
     // @Test(enabled = false)
     @Test(dataProvider = "SearchTermsQE", priority = 1)
     public void searchIndeedJobsQETest(String jTitle, String jLocation) {
-        String jobTitle = jTitle;
-        String jobLocation = jLocation;
         CsvFileWriter outputFile = new CsvFileWriter(
-                getClearedTitle(jobTitle) + "_" + getClearedTitle(jobLocation));
+                getClearedTitle(jTitle) + "_" + getClearedTitle(jLocation));
 
-        startHomePageSearch(jobTitle, jobLocation);
+        startHomePageSearch(jTitle, jLocation);
         setSearchToPostedByEmployer();
         setSearchToJobTypeFullTime();
         setSearchToDatePosted14Days();
 
         disableObstructingElement();
-        extractCompaniesData(jobTitle, jobLocation, outputFile);
+        extractCompaniesData(jTitle, jLocation, outputFile);
     }
 
     @DataProvider(name = "SearchTermsDev")
@@ -59,19 +71,17 @@ public class IndeedWorkflowTests extends BaseTestsIndeed {
 
     @Test(dataProvider = "SearchTermsDev", priority = 2)
     public void searchForDevJobsRemoteUSTest(String jTitle, String jLocation) {
-        String jobTitle = jTitle;
-        String jobLocation = jLocation;
         CsvFileWriter outputFile = new CsvFileWriter(
-                getClearedTitle(jobTitle) + "_" + getClearedTitle(jobLocation));
+                getClearedTitle(jTitle) + "_" + getClearedTitle(jLocation));
 
-        startHomePageSearch(jobTitle, jobLocation);
+        startHomePageSearch(jTitle, jLocation);
         setSearchToPostedByEmployer();
         setSearchToJobTypeFullTime();
         setSearchToRemoteJobs();
         setSearchToDatePosted14Days();
 
         disableObstructingElement();
-        extractCompaniesData(jobTitle, jobLocation, outputFile);
+        extractCompaniesData(jTitle, jLocation, outputFile);
     }
     private void extractCompaniesData(String jobTitle, String jobLocation, CsvFileWriter file) {
         int linksToProcess = searchResultsPage.getResultsSize();

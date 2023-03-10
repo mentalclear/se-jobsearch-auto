@@ -11,18 +11,20 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import pages.HomePageOnGlassDoor;
 import pages.HomePageOnIndeed;
-import utils.CookieManager;
 import utils.EventReporter;
+import utils.OSSelector;
 import utils.WindowManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class BaseTestsIndeed {
+public class BaseTests {
     // private WebDriver driver; // Without listener
     private EventFiringWebDriver driver;
+    protected HomePageOnGlassDoor homePageOnGlassDoor;
     protected HomePageOnIndeed homePageOnIndeed;
 
     @BeforeClass
@@ -33,35 +35,22 @@ public class BaseTestsIndeed {
         driver.register(new EventReporter());
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS); // waits for page load on project level
         // driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS); // waits on a project level
-        goHome();
+        homePageOnGlassDoor = new HomePageOnGlassDoor(driver);
         homePageOnIndeed = new HomePageOnIndeed(driver);
     }
 
     public static void selectWebDriverForOS() {
+        var os = new OSSelector();
         String selectedDriver = "chromedriver";
-        if(isLinux()) selectedDriver = "linux/chromedriver";
-        if(isWindows()) selectedDriver = "windows/chromedriver.exe";
+        if(os.isLinux()) selectedDriver = "linux/chromedriver";
+        if(os.isWindows()) selectedDriver = "windows/chromedriver.exe";
         System.setProperty("webdriver.chrome.driver", "resources/driver/" + selectedDriver);
-    }
-
-    private static boolean isWindows() {
-        return System.getProperty("os.name").contains("Windows");
-    }
-
-    private static boolean isLinux() {
-        return System.getProperty("os.name").contains("Linux");
-    }
-
-    @BeforeMethod
-    public void goHome() {
-        driver.get("https://www.indeed.com/");
     }
 
     @AfterClass
     public void tearDown() {
         driver.quit();
     }
-
     @AfterMethod
     public void recordFailure(ITestResult result) throws IOException {
         if (ITestResult.FAILURE == result.getStatus()) {
@@ -70,7 +59,6 @@ public class BaseTestsIndeed {
             Files.move(screenshot, new File("resources/screenshots/" + result.getName() + ".png"));
         }
     }
-
     private ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
         String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
@@ -79,11 +67,10 @@ public class BaseTestsIndeed {
         // options.setHeadless(true); // Running in headless mode
         return options;
     }
-    public CookieManager getCookieManager(){
-        return new CookieManager(driver);
-    }
-
     public WindowManager getWindowManager() {
         return new WindowManager(driver);
+    }
+    public void goHome(String url) {
+        driver.get(url);
     }
 }
