@@ -8,11 +8,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.asserts.SoftAssert;
 import pages.HomePageOnIndeed;
 import pages.SearchResultsPageOnIndeed;
-
 import java.util.concurrent.TimeUnit;
-
 import static base.BaseTests.selectWebDriverForOS;
-
 
 public class HomePageOnIndeedSteps {
     private static WebDriver driver;
