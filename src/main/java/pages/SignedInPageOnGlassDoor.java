@@ -1,11 +1,11 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.OSSelector;
+import utils.PageInteractions;
 
 public class SignedInPageOnGlassDoor {
     private final WebDriver driver;
@@ -18,16 +18,12 @@ public class SignedInPageOnGlassDoor {
     private final By whatSearchField = By.xpath("//input[@data-test='search-bar-keyword-input']");
     private final By whereSearchField = By.xpath("//input[@data-test='search-bar-location-input']");
     private final By submitButton = By.xpath("//button[@data-test='search-bar-submit']");
+    private final By footerElement = By.id("GarnishFooter");
 
     public String getPageTitle() {
-        scrollPageDown();
+        var pageInteraction = new PageInteractions(driver);
+        pageInteraction.scrollPageDown(footerElement);
         return driver.getTitle();
-    }
-
-    private void scrollPageDown() {
-        var bottomPageElement = driver.findElement(By.id("GarnishFooter"));
-        String script = "arguments[0].scrollIntoView({behavior: 'smooth'})";
-        ((JavascriptExecutor) driver).executeScript(script, bottomPageElement);
     }
 
     public void searchForJobAndLocation(String jobTitle, String jobLocation) {

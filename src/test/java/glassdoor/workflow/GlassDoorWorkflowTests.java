@@ -4,22 +4,25 @@ import base.BaseTestsGlassDoor;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import pages.AllSearchResultPage;
-import pages.AllSearchResultPage.*;
+import pages.AllSearchResultPageGlassDoor;
+import pages.AllSearchResultPageGlassDoor.*;
 import pages.SignedInPageOnGlassDoor;
 import utils.CsvFileWriter;
+
 import static org.testng.Assert.*;
 
 public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
     private SignedInPageOnGlassDoor signedInPageOnGlassDoor;
-    private AllSearchResultPage allSearchResultsPage;
+    private AllSearchResultPageGlassDoor allSearchResultsPage;
+
     @BeforeClass
-    public void setupGlassDoorSuite(){
+    public void setupGlassDoorSuite() {
         openGlassDoorAndSignIn();
     }
-    @DataProvider(name = "SearchTermsQE")
-    public Object[][] createQEData(){
-        return new Object[][] {
+
+    @DataProvider(name = "SearchTermQE-US")
+    public Object[][] createQEDataUS() {
+        return new Object[][]{
                 {"Quality Engineer", "Virginia, US"},
                 {"Quality Engineer", "Maryland, US"},
                 {"Quality Engineer", "Washington DC, US"},
@@ -40,6 +43,19 @@ public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
                 {"Software Test Engineer", "Washington DC, US"}
         };
     }
+
+    @DataProvider(name = "SearchTermsQE")
+    public Object[][] createQEData() {
+        return new Object[][]{
+                {"Quality Engineer", "United States"},
+                {"Software QA", "United States"},
+                {"QA Engineer", "United States"},
+                {"Software Quality Engineer", "United States"},
+                {"Software Tester", "United States"},
+                {"Software Test Engineer", "United States"}
+        };
+    }
+
     @Test(dataProvider = "SearchTermsQE", priority = 1)
     public void searchForJobs(String jobTitle, String jobLocation) {
         var outputFile = new CsvFileWriter(getClearedTitle(jobTitle)
@@ -53,12 +69,14 @@ public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
 
         extractCompaniesData(outputFile);
     }
+
     private void extractCompaniesData(CsvFileWriter file) {
         int linksToProcess = allSearchResultsPage.getResultsSize();
-        while(linksToProcess > 1) {
+        while (linksToProcess > 1) {
             for (int i = 0; i < allSearchResultsPage.getResultsSize(); i++) {
                 CompanyProfilePane companyProfilePane = allSearchResultsPage.clickListItemCompanyLink(i);
                 companyProfilePane.storeCompanyInfo(file);
+                allSearchResultsPage.scrollPageDown();
                 linksToProcess--;
             }
             if (allSearchResultsPage.isPaginationNextVisible()) {
@@ -67,6 +85,7 @@ public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
             }
         }
     }
+
     private void openGlassDoorAndSignIn() {
         homePageOnGlassDoor.populateEmailField("testmeup007@gmail.com");
         homePageOnGlassDoor.clickEmailSubmitButton();
@@ -75,6 +94,7 @@ public class GlassDoorWorkflowTests extends BaseTestsGlassDoor {
         assertEquals(signedInPageOnGlassDoor.getPageTitle(),
                 "Glassdoor Job Search | Find the job that fits your life");
     }
+
     private String getClearedTitle(String title) {
         return title.trim().replaceAll("[,.\\s]", "_");
     }

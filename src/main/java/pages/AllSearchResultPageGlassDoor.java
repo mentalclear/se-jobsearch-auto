@@ -4,11 +4,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.CsvFileWriter;
+import utils.PageInteractions;
 
-public class AllSearchResultPage {
+public class AllSearchResultPageGlassDoor {
     private final WebDriver driver;
     private WebDriverWait wait;
-    public AllSearchResultPage(WebDriver driver) {
+    public AllSearchResultPageGlassDoor(WebDriver driver) {
         this.driver = driver;
     }
     private final By filterJobType = By.id("filter_jobType");
@@ -19,6 +20,7 @@ public class AllSearchResultPage {
     private final By twoWeeksSelectedOption = By.xpath("//div[@data-test='DATEPOSTED']//span[text()='Last 2 Weeks']");
     private final By jobResultsList = By.xpath("//ul[@data-test='jlGrid']//li");
     private final By paginationNextButton = By.xpath("//button[@data-test='pagination-next']");
+    private final By jobAlertElement = By.id("InlineJobAlert");
 
     public void setJobTypeFilterFullTime(){
         setJobFilter(filterJobType, fullTimeOption, fullTimeSelectedOption);
@@ -49,10 +51,21 @@ public class AllSearchResultPage {
         return new CompanyProfilePane(driver);
     }
     private void clickSearchResultCard(int index) {
-        WebElement searchResultsElement = driver.findElements(jobResultsList).get(index);
-        wait.until(ExpectedConditions.elementToBeClickable(searchResultsElement));
-        searchResultsElement.click();
+        try {
+            WebElement searchResultsElement = driver.findElements(jobResultsList).get(index);
+            wait.until(ExpectedConditions.visibilityOf(searchResultsElement));
+            wait.until(ExpectedConditions.elementToBeClickable(searchResultsElement));
+            searchResultsElement.click();
+        } catch (Exception e) {
+            System.out.printf("This happened %s", e);
+        }
     }
+
+    public void scrollPageDown() {
+        var pageInteraction = new PageInteractions(driver);
+        pageInteraction.scrollPageDown(jobAlertElement);
+    }
+
     public class CompanyProfilePane{
         private final WebDriver driver;
         private final By companyName = By.xpath("//div[@data-test='employerName']");
@@ -62,10 +75,11 @@ public class AllSearchResultPage {
             this.driver = driver;
         }
         public void storeCompanyInfo(CsvFileWriter fileWriter) {
-            wait = new WebDriverWait(driver, 60);
+            wait = new WebDriverWait(driver, 360);
             String companyUrl = "";
             String company = "";
             try {
+                wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div#JDCol > div > span")));
                 wait.until(ExpectedConditions.visibilityOfElementLocated(companyName));
                 company = driver.findElement(companyName).getText().split("\n")[0];
                 companyUrl = driver.findElement(companySiteUrl).getAttribute("href");
