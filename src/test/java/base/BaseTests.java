@@ -47,10 +47,10 @@ public class BaseTests {
         System.setProperty("webdriver.chrome.driver", "resources/driver/" + selectedDriver);
     }
 
-    @AfterClass
-    public void tearDown() {
-        driver.quit();
-    }
+//    @AfterClass
+//    public void tearDown() {
+//        driver.quit();
+//    }
     @AfterMethod
     public void recordFailure(ITestResult result) throws IOException {
         if (ITestResult.FAILURE == result.getStatus()) {

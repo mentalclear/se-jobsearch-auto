@@ -9,9 +9,11 @@ import utils.PageInteractions;
 public class AllSearchResultPageGlassDoor {
     private final WebDriver driver;
     private WebDriverWait wait;
+
     public AllSearchResultPageGlassDoor(WebDriver driver) {
         this.driver = driver;
     }
+
     private final By filterJobType = By.id("filter_jobType");
     private final By fullTimeOption = By.xpath("//button[@value='fulltime']");
     private final By fullTimeSelectedOption = By.xpath("//div[@data-test='JOBTYPE']//span[text()='Full-time']");
@@ -21,35 +23,50 @@ public class AllSearchResultPageGlassDoor {
     private final By jobResultsList = By.xpath("//ul[@data-test='jlGrid']//li");
     private final By paginationNextButton = By.xpath("//button[@data-test='pagination-next']");
     private final By jobAlertElement = By.id("InlineJobAlert");
+    private final By estimatedSalaryModal = By.xpath("//div[@data-test='Estimated-Salary']//div/span");
 
-    public void setJobTypeFilterFullTime(){
+
+    public void setJobTypeFilterFullTime() {
         setJobFilter(filterJobType, fullTimeOption, fullTimeSelectedOption);
     }
-    public void setJobPostedTime2Weeks(){
+
+    public void setJobPostedTime2Weeks() {
         setJobFilter(filterPostedTime, postedTime2WeeksOption, twoWeeksSelectedOption);
     }
-    private void setJobFilter(By selector, By option, By result){
+
+    private void setJobFilter(By selector, By option, By result) {
         wait = new WebDriverWait(driver, 60);
         driver.findElement(selector).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(option));
         driver.findElement(option).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(result));
     }
+
     public int getResultsSize() {
         return driver.findElements(jobResultsList).size();
     }
+
     public Boolean isPaginationNextVisible() {
         return driver.findElement(paginationNextButton).isEnabled();
     }
 
     public void getToNextResultsPage() {
+        wait = new WebDriverWait(driver, 5);
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(estimatedSalaryModal));
+            driver.findElement(estimatedSalaryModal).click();
+        } catch (TimeoutException|NoSuchElementException ignored) {}
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(estimatedSalaryModal));
         driver.findElement(paginationNextButton).click();
     }
+
     public CompanyProfilePane clickListItemCompanyLink(int index) {
         wait = new WebDriverWait(driver, 60);
         clickSearchResultCard(index);
         return new CompanyProfilePane(driver);
     }
+
     private void clickSearchResultCard(int index) {
         try {
             WebElement searchResultsElement = driver.findElements(jobResultsList).get(index);
@@ -66,7 +83,7 @@ public class AllSearchResultPageGlassDoor {
         pageInteraction.scrollPageDown(jobAlertElement);
     }
 
-    public class CompanyProfilePane{
+    public class CompanyProfilePane {
         private final WebDriver driver;
         private final By companyName = By.xpath("//div[@data-test='employerName']");
         private final By companySiteUrl = By.cssSelector("div#CompanyContainer a");
@@ -74,6 +91,7 @@ public class AllSearchResultPageGlassDoor {
         public CompanyProfilePane(WebDriver driver) {
             this.driver = driver;
         }
+
         public void storeCompanyInfo(CsvFileWriter fileWriter) {
             wait = new WebDriverWait(driver, 360);
             String companyUrl = "";

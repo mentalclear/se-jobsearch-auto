@@ -56,9 +56,9 @@ public class GlassDoorWorkflowTests extends BaseTests {
         return new Object[][]{
 //                {"Quality Engineer", "United States"},
 //                {"Software QA", "United States"},
-                {"QA Engineer", "United States"},
+//                {"QA Engineer", "United States"},
 //                {"Software Quality Engineer", "United States"},
-//                {"Software Tester", "United States"},
+                {"Software Tester", "United States"},
 //                {"Software Test Engineer", "United States"}
         };
     }
